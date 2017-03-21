@@ -25,6 +25,7 @@ set(DIRS
   dbscan
   decision_stump
   decision_tree
+  hierarchial
   det
   emst
   fastmks

@@ -468,6 +468,7 @@ if (UNIX)
           mlpack_hmm_train
           mlpack_hmm_viterbi
           mlpack_hoeffding_tree
+          mlpack_hierachial
           mlpack_kernel_pca
           mlpack_kmeans
           mlpack_lars
