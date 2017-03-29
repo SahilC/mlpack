@@ -99,11 +99,12 @@ int main(int argc, char* argv[])
   for(size_t i = 0;i < results.n_cols; ++i) {
     bool no_change = true;
     if(cluster(i,0) == cluster_number) {
-      for(size_t j = 0; j < results.n_cols - 10; ++j) {
-        if((cluster(results(1,j),0) == 0 && results(0,j) == i)) {
+      for(size_t j = 0; j < results.n_cols; ++j) {
+      	// cout<<results(2,j)<<endl;
+        if((cluster(results(1,j),0) == 0 && results(0,j) == i) && results(2,j) < 0.1) {
           no_change = false;
           cluster(results(1,j),0) = cluster_number;
-        } else if((cluster(results(0,j),0) == 0 && results(1,j) == i)) {
+        } else if((cluster(results(0,j),0) == 0 && results(1,j) == i) && results(2,j) < 0.1) {
           no_change = false;           
           cluster(results(0,j),0) = cluster_number;
         }  
