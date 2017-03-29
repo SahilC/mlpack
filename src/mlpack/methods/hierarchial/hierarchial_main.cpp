@@ -90,6 +90,27 @@ int main(int argc, char* argv[])
 
   // Unmap the results.
   arma::mat unmappedResults(results.n_rows, results.n_cols);
+  arma::mat cluster(dataPoints.n_cols,1);
+  size_t cluster_number = 0;
+  cluster_number += 1;
+  cluster(results(0,0)) = cluster_number;
+  for(size_t i = 0; i < results.n_cols; ++i) {
+    for(size_t j = 0; j < results.n_cols; ++j) {
+        if(cluster(j) == cluster_number) {
+          for(size_t k = 0; k < results.n_cols; ++k) {
+            if(results(0,k) == j) {
+              cluster(results(1,k),0) = cluster_number; 
+            } else if(results(1,k) == j) {
+              cluster(results(0,k),0) = cluster_number; 
+            }
+          }
+        } 
+    }        
+  }
+  for(size_t i = 0; i < results.n_cols; ++i) {
+    cout<<results(0,i)<<" "<<cluster(results(0,i),0)<<endl;
+  }
+
   for (size_t i = 0; i < results.n_cols; ++i)
   {
     
