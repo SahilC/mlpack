@@ -92,21 +92,11 @@ int main(int argc, char* argv[])
   arma::mat unmappedResults(results.n_rows, results.n_cols);
   for (size_t i = 0; i < results.n_cols; ++i)
   {
-    const size_t indexA = oldFromNew[size_t(results(0, i))];
-    const size_t indexB = oldFromNew[size_t(results(1, i))];
-
-    if (indexA < indexB)
-    {
-      unmappedResults(0, i) = indexA;
-      unmappedResults(1, i) = indexB;
+    
+    for(size_t j = 0; j < results.n_rows; ++j) {
+        unmappedResults(j, i) = dataPoints(j,i);  
     }
-    else
-    {
-      unmappedResults(0, i) = indexB;
-      unmappedResults(1, i) = indexA;
-    }
-
-    unmappedResults(2, i) = results(2, i);
+    //unmappedResults(2, i) = results(2, i);
   }
 
   if (CLI::HasParam("output"))
