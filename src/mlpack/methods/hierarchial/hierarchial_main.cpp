@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
   
   arma::mat valid_edges(dataPoints.n_cols,1);
   for(size_t i = 0;i < results.n_cols; ++i) {
-  	if(results(2,i) < 1.1) {
+  	if(results(2,i) < 0.11) {
   		valid_edges(i,0) = 1;
   	}
   }
