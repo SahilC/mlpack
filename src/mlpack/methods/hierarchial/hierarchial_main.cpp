@@ -88,32 +88,50 @@ int main(int argc, char* argv[])
   arma::mat results;
   dtb.ComputeMST(results);
 
+  
+  arma::mat valid_edges(dataPoints.n_cols,1);
+  for(size_t i = 0;i < results.n_cols; ++i) {
+  	if(results(2,i) < 1.1) {
+  		valid_edges(i,0) = 1;
+  	}
+  }
+
   // Unmap the results.
   arma::mat unmappedResults(results.n_rows, results.n_cols);
   arma::mat cluster(dataPoints.n_cols,1);
   size_t cluster_number = 0;
   cluster_number += 1;
-  cluster(results(0,0),0) = cluster_number;
-  cluster(results(1,0),0) = cluster_number;
-
-  for(size_t i = 0;i < results.n_cols; ++i) {
-    bool no_change = true;
-    if(cluster(i,0) == cluster_number) {
-      for(size_t j = 0; j < results.n_cols; ++j) {
-      	// cout<<results(2,j)<<endl;
-        if((cluster(results(1,j),0) == 0 && results(0,j) == i) && results(2,j) < 0.1) {
-          no_change = false;
-          cluster(results(1,j),0) = cluster_number;
-        } else if((cluster(results(0,j),0) == 0 && results(1,j) == i) && results(2,j) < 0.1) {
-          no_change = false;           
-          cluster(results(0,j),0) = cluster_number;
-        }  
-      }
-      if(!no_change) {
-        i = 0; 
-      }
-    }
-  }
+  
+  for(size_t k = 0; k < results.n_cols; ++k) {
+  	  if(cluster(results(0,k),0) == 0 && cluster(results(1,k),0) == 0) {
+	  	  cluster(results(0,k),0) = cluster_number;
+	  	  cluster(results(1,k),0) = cluster_number;
+		  for(size_t i = 0;i < results.n_cols; ++i) {
+		    	bool no_change = true;
+		    	if(cluster(i,0) == cluster_number) {
+			      	for(size_t j = 0; j < results.n_cols; ++j) {
+			        	if((cluster(results(1,j),0) == 0 && results(0,j) == i) && valid_edges(j,0) == 1) {
+			          		no_change = false;
+			          		cluster(results(1,j),0) = cluster_number;
+			        	} else if((cluster(results(0,j),0) == 0 && results(1,j) == i) && valid_edges(j,0) == 1) {
+			          		no_change = false;           
+			          		cluster(results(0,j),0) = cluster_number;
+			        	}  
+			      	}
+			      	if(!no_change) {
+			        	i = 0; 
+			      	}
+		    	}
+		  	}
+		  	cluster_number+=1;
+		} else {
+			if(cluster(results(0,k),0) == 0) {
+				cluster(results(0,k),0) = cluster(results(1,k),0);
+			} else {
+				cluster(results(1,k),0) = cluster(results(0,k),0);
+			}
+		}
+ 	}
 
   for(size_t i = 0; i < results.n_cols; ++i) {
     cout<<results(0,i)<<" "<<results(1,i)<<" "<<cluster(results(0,i),0)<<endl;
